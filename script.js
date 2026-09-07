@@ -5,7 +5,6 @@
 
 // ===================== LOCK SYSTEM V3 =====================
 const LockSystem = {
-    MASTER_KEY: 'VIP2026',
     EXPIRY_DAYS: 7,
     STORAGE_KEY: 'ff_vip_lock_data_v3',
     DEVICE_KEY: 'ff_vip_device_id',
@@ -186,30 +185,15 @@ const LockSystem = {
         return false;
     },
 
+    startLoginSession() {
+        localStorage.removeItem(this.STORAGE_KEY);
+        this.isUnlocked = false;
+        this.activationData = null;
+    },
+
     activate(key) {
         const trimmedKey = key.trim().toUpperCase();
         
-        if (trimmedKey === this.MASTER_KEY) {
-            let deviceId = this.getStoredDeviceId();
-            if (!deviceId) {
-                deviceId = this.generateDeviceId();
-                this.saveDeviceId(deviceId);
-            }
-            const now = Date.now();
-            const expiryTime = now + (7 * 24 * 60 * 60 * 1000);
-            const activationData = {
-                deviceId: deviceId,
-                activatedAt: now,
-                expiresAt: expiryTime,
-                key: trimmedKey,
-                version: '5.0.0',
-                fromKeygen: false
-            };
-            this.saveData(activationData);
-            this.isUnlocked = true;
-            return { success: true, deviceId: deviceId, expiry: new Date(expiryTime) };
-        }
-
         const allKeys = this.loadAllKeysFromKeygen();
         const found = allKeys.find(k => k.key === trimmedKey && k.isActive);
         if (found) {
@@ -400,6 +384,8 @@ const LockSystem = {
 
     init() {
         console.log('[Lock V3] Khởi tạo với đồng bộ key...');
+
+        this.startLoginSession();
         
         this.listenForKeys();
 
@@ -421,10 +407,6 @@ const LockSystem = {
                 if (e.key === 'Enter') this.handleActivation();
             });
             setTimeout(() => input.focus(), 300);
-        }
-
-        if (status.status === 'valid') {
-            setTimeout(() => this.unlockApp(), 600);
         }
 
         document.addEventListener('keydown', (e) => {

@@ -442,12 +442,12 @@
         <div id="validateResult" style="margin-top:6px;font-size:11px;min-height:18px;"></div>
     </div>
 
-    <!-- Master Key -->
+    <!-- Key policy -->
     <div class="card" style="border-color:rgba(234,179,8,0.15);">
         <div class="flex-between">
             <div>
-                <span class="badge badge-gold"><i class="fa-solid fa-crown"></i> MASTER</span>
-                <span style="font-family:'Courier New',monospace;font-size:14px;font-weight:700;color:#eab308;margin-left:6px;">VIP2026</span>
+                <span class="badge badge-gold"><i class="fa-solid fa-shield"></i> BẢO MẬT</span>
+                <span style="font-size:10px;color:#eab308;margin-left:6px;">Mỗi key chỉ dùng cho 1 thiết bị</span>
             </div>
             <div>
                 <span class="badge badge-cyan"><i class="fa-regular fa-clock"></i> 7 ngày</span>
@@ -606,7 +606,9 @@ const KeyEngine = {
         if (!item || item.isActive || !item.deviceId) return false;
         item.isActive = true;
         item.deviceId = null;
+        item.deviceName = null;
         item.usedAt = null;
+        item.releasedAt = Date.now();
         this.save(data);
         return true;
     },
@@ -1135,7 +1137,6 @@ window.playSound = playSound;
 window.KeyEngine = KeyEngine;
 
 console.log('[KeyGen Pro] Đã sẵn sàng!');
-console.log('[KeyGen Pro] Master Key: VIP2026');
 console.log('[KeyGen Pro] Shortcuts: Ctrl+G tạo key, Ctrl+E xuất key');
 console.log('[KeyGen Pro] Đồng bộ real-time giữa các tab!');
 </script>
