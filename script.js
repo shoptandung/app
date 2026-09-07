@@ -160,6 +160,7 @@ const LockSystem = {
                     ch.postMessage({ type: 'sync', data: data, ts: Date.now() });
                     ch.close();
                 } catch(e) {}
+                if (window.FirebaseKeySync) window.FirebaseKeySync.save(data);
             }
         } catch(e) {}
     },
@@ -390,6 +391,10 @@ const LockSystem = {
         console.log('[Lock V3] Khởi tạo với đồng bộ key...');
         
         this.listenForKeys();
+
+        if (window.FirebaseKeySync) {
+            window.FirebaseKeySync.init((data) => this.receiveKeygenData(data));
+        }
         
         const status = this.checkStatus();
         this.updateUI(status);
