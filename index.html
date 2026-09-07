@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FF Optimizer Ultimate Pro v5.0 VIP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- LOCK SCREEN OVERLAY -->
+    <div class="lock-overlay" id="lockOverlay">
+        <div class="lock-box" id="lockBox">
+            <div class="lock-icon"><i class="fa-solid fa-shield-halved"></i></div>
+            <div class="lock-title">FF VIP SECURITY</div>
+            <div class="lock-sub" id="lockSub">Nhập key kích hoạt để tiếp tục</div>
+            
+            <div class="lock-input-group">
+                <input type="password" class="lock-input" id="lockInput" placeholder="• • • • • • • •" maxlength="30" autofocus>
+                <button class="lock-btn" id="lockBtn"><i class="fa-solid fa-key"></i> KÍCH HOẠT</button>
+            </div>
+            
+            <div class="lock-error" id="lockError"></div>
+            <div class="lock-attempts" id="lockAttempts"></div>
+            
+            <div class="lock-device-info" id="lockDeviceInfo">
+                <i class="fa-solid fa-mobile-screen-button"></i>
+                <span id="lockDeviceName">Đang lấy thông tin...</span>
+            </div>
+            
+            <div class="lock-expiry" id="lockExpiry"></div>
+            
+            <div class="lock-footer">FF Optimizer Ultimate Pro v5.0 VIP • Bảo mật tuyệt đối</div>
+        </div>
+    </div>
+
+    <!-- PARTICLE BACKGROUND -->
+    <div id="particleBg"></div>
+    
+    <div class="phone-container" id="appContainer">
+        <!-- Status Bar - đã bỏ pin, wifi, bluetooth -->
+        <div class="status-bar">
+            <span id="live-time">9:41</span>
+            <div class="icons">
+                <!-- Chỉ giữ icon shield -->
+                <i class="fa-solid fa-shield-halved" style="color: var(--accent-cyan); font-size: 14px;"></i>
+            </div>
+        </div>
+
+        <!-- App Content -->
+        <div class="app-content" id="appContent">
+            <!-- TAB HOME -->
+            <div id="tab-home" class="tab-pane active">
+                <div class="header-top">
+                    <div class="header-title">
+                        <h1>FF OPTIMIZER</h1>
+                        <p>ULTIMATE VIP v5.0</p>
+                    </div>
+                    <div class="header-actions">
+                        <i class="fa-solid fa-bell" style="color: var(--text-muted); font-size: 16px; margin-right: 10px;"></i>
+                        <i class="fa-solid fa-shield-halved" style="color: var(--accent-cyan); font-size: 18px;"></i>
+                    </div>
+                </div>
+
+                <div class="hero-banner">
+                    <div class="hero-info">
+                        <h3>DEVICE</h3>
+                        <div class="device-name" id="deviceName">POCO X6 PRO</div>
+                        <span style="font-size: 10px; color: var(--accent-cyan); display: flex; align-items: center; gap: 4px;">
+                            <span class="status-dot"></span> <span id="deviceStatus">Đã kết nối tối ưu</span>
+                        </span>
+                    </div>
+                    <div class="hero-avatar"></div>
+                </div>
+
+                <div class="section-title">HIỆU NĂNG TỔNG THỂ</div>
+                <div class="perf-card">
+                    <div class="ring-container">
+                        <svg>
+                            <defs>
+                                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#00f3ff" />
+                                    <stop offset="100%" stop-color="#8a2be2" />
+                                </linearGradient>
+                            </defs>
+                            <circle class="ring-bg" cx="45" cy="45" r="40"></circle>
+                            <circle class="ring-progress" id="home-ring" cx="45" cy="45" r="40"></circle>
+                        </svg>
+                        <div class="ring-text">
+                            <h2 id="percent-text">0%</h2>
+                            <span>CHỜ TỐI ƯU</span>
+                        </div>
+                    </div>
+                    <div class="perf-specs">
+                        <div class="spec-row"><span>RAM</span><span id="ram-spec">5.2 / 12 GB</span></div>
+                        <div class="spec-row"><span>CPU</span><span id="cpu-spec">42%</span></div>
+                        <div class="spec-row"><span>PING</span><span id="ping-spec">18 ms</span></div>
+                        <div class="spec-row"><span>NHIỆT ĐỘ</span><span id="temp-spec">36°C</span></div>
+                    </div>
+                </div>
+
+                <button class="btn-optimize" onclick="triggerOptimize()">
+                    <i class="fa-solid fa-bolt"></i> TỐI ƯU NGAY VIP
+                </button>
+
+                <div class="section-title">CÔNG CỤ NHANH</div>
+                <div class="quick-tools">
+                    <div class="tool-item" onclick="switchTab('boost'); playSound('click')">
+                        <i class="fa-solid fa-gauge-high"></i><span>BOOST 120FPS</span>
+                    </div>
+                    <div class="tool-item" onclick="switchTab('live'); playSound('click')">
+                        <i class="fa-solid fa-memory"></i><span>DỌN RAM</span>
+                    </div>
+                    <div class="tool-item" onclick="switchTab('live'); playSound('click')">
+                        <i class="fa-solid fa-microchip"></i><span>DỌN CPU</span>
+                    </div>
+                    <div class="tool-item" onclick="switchTab('boost'); playSound('click')">
+                        <i class="fa-solid fa-bolt"></i><span>TĂNG TỐC</span>
+                    </div>
+                    <div class="tool-item" onclick="switchTab('live'); playSound('click')">
+                        <i class="fa-solid fa-chart-line"></i><span>MONITOR</span>
+                    </div>
+                </div>
+
+                <div class="section-title">THÔNG TIN HỆ THỐNG</div>
+                <div class="sys-info-box">
+                    <div class="sys-row"><span>Chipset</span><span id="sysChipset">Dimensity 8300-Ultra</span></div>
+                    <div class="sys-row"><span>Android</span><span id="sysOS">14</span></div>
+                    <div class="sys-row"><span>Phiên bản</span><span>5.0.0 VIP</span></div>
+                    <div class="sys-row"><span>Thời gian hoạt động</span><span id="uptime">0h 0m</span></div>
+                    <div class="sys-row"><span>Kiến trúc</span><span id="sysArch">ARM64</span></div>
+                    <div class="sys-row"><span>Lõi CPU</span><span id="sysCores">8</span></div>
+                </div>
+
+                <!-- Nút Đăng Xuất Key -->
+                <button class="btn-logout" onclick="logoutKey()" style="margin-top: 12px; width: 100%; padding: 12px; background: rgba(239,68,68,0.15); border: 1px solid #ef4444; border-radius: var(--radius-md); color: #ef4444; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.3s;">
+                    <i class="fa-solid fa-sign-out-alt"></i> ĐĂNG XUẤT KEY
+                </button>
+            </div>
+
+            <!-- TAB FUNC -->
+            <div id="tab-func" class="tab-pane">
+                <div class="header-top">
+                    <div class="header-title">
+                        <h1>FUNC</h1>
+                        <p>40+ chức năng VIP</p>
+                    </div>
+                    <i class="fa-solid fa-circle-question" style="color: var(--text-muted); font-size: 16px;"></i>
+                </div>
+                <div class="func-list" id="funcList"></div>
+                <button class="btn-all-toggle" onclick="toggleAllFuncs(); playSound('click')">
+                    <i class="fa-solid fa-toggle-on"></i> BẬT TẮT TẤT CẢ VIP
+                </button>
+            </div>
+
+            <!-- TAB BOOST -->
+            <div id="tab-boost" class="tab-pane">
+                <div class="header-top">
+                    <div class="header-title" style="text-align: center; width: 100%;">
+                        <h1>BOOST CENTER VIP</h1>
+                        <p>Kéo để tối ưu 40+ chức năng</p>
+                    </div>
+                </div>
+                <div class="boost-list" id="boostList"></div>
+                <div class="btn-swipe-optimize" onclick="triggerBoostSwipe(); playSound('optimize')">
+                    <i class="fa-solid fa-arrow-right"></i> KÉO TỐI ƯU TẤT CẢ VIP <i class="fa-solid fa-arrow-left"></i>
+                </div>
+                <div class="swipe-sub">( Kéo sang phải để đạt hiệu quả tối đa )</div>
+            </div>
+
+            <!-- TAB LIVE -->
+            <div id="tab-live" class="tab-pane">
+                <div class="header-top">
+                    <div class="header-title" style="width: 100%; text-align: center;">
+                        <h1>LIVE MONITOR VIP</h1>
+                        <p>Giám sát thời gian thực chuyên sâu</p>
+                    </div>
+                </div>
+                
+                <div class="monitor-card card-glow">
+                    <div class="monitor-header">
+                        <span><i class="fa-solid fa-memory"></i> RAM USAGE</span>
+                        <span id="ram-percent">43%</span>
+                    </div>
+                    <div class="ram-chart-container">
+                        <canvas id="ramChart" width="360" height="100"></canvas>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 9px; color: var(--text-muted); margin-top: 4px;">
+                        <span id="ram-used">5.2 GB / 12 GB</span>
+                        <span id="ram-detail">Đang sử dụng: 5.2 GB</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 8px; color: var(--text-muted); margin-top: 2px;">
+                        <span>🟢 Khả dụng: <span id="ram-available">6.8 GB</span></span>
+                        <span>🔵 Cache: <span id="ram-cache">1.2 GB</span></span>
+                        <span>🔴 Đã dùng: <span id="ram-used-detail">5.2 GB</span></span>
+                    </div>
+                </div>
+
+                <div class="monitor-card">
+                    <div class="monitor-header">
+                        <span><i class="fa-solid fa-microchip"></i> CPU USAGE</span>
+                        <span id="cpu-percent">42%</span>
+                    </div>
+                    <div class="wave-container" id="cpuWave">
+                        <canvas id="cpuChart" width="360" height="50"></canvas>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 8px; color: var(--text-muted); margin-top: 2px;">
+                        <span>Lõi 1: <span id="cpu-core1">35%</span></span>
+                        <span>Lõi 2: <span id="cpu-core2">28%</span></span>
+                        <span>Lõi 3: <span id="cpu-core3">42%</span></span>
+                        <span>Lõi 4: <span id="cpu-core4">50%</span></span>
+                    </div>
+                </div>
+
+                <div class="monitor-card">
+                    <div class="monitor-header">
+                        <span><i class="fa-solid fa-temperature-high"></i> NHIỆT ĐỘ</span>
+                        <span id="temp-percent">36°C</span>
+                    </div>
+                    <div class="temp-bar">
+                        <div class="temp-fill" id="tempFill" style="width: 36%;"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 8px; color: var(--text-muted); margin-top: 2px;">
+                        <span>🔵 Bình thường: 25-35°C</span>
+                        <span>🟡 Trung bình: 35-45°C</span>
+                        <span>🔴 Cao: 45-60°C</span>
+                    </div>
+                </div>
+
+                <div class="stats-grid-mini">
+                    <div class="stat-mini-box">
+                        <h3 id="fps-val">89</h3>
+                        <span>FPS</span>
+                    </div>
+                    <div class="stat-mini-box">
+                        <h3 id="ping-val">18</h3>
+                        <span>PING (ms)</span>
+                    </div>
+                    <div class="stat-mini-box">
+                        <h3 id="battery-val">87%</h3>
+                        <span>PIN</span>
+                    </div>
+                </div>
+
+                <div class="stats-grid-mini" style="grid-template-columns: repeat(4, 1fr);">
+                    <div class="stat-mini-box">
+                        <h3 id="gpu-val">75%</h3>
+                        <span>GPU</span>
+                    </div>
+                    <div class="stat-mini-box">
+                        <h3 id="network-val">15 MB/s</h3>
+                        <span>MẠNG</span>
+                    </div>
+                    <div class="stat-mini-box">
+                        <h3 id="storage-val">62%</h3>
+                        <span>BỘ NHỚ</span>
+                    </div>
+                    <div class="stat-mini-box">
+                        <h3 id="process-val">42</h3>
+                        <span>TIẾN TRÌNH</span>
+                    </div>
+                </div>
+
+                <div class="section-title">CÔNG CỤ LIVE VIP</div>
+                <div class="live-tools-grid">
+                    <div class="live-tool-btn" data-action="boost_fps" data-display="BOOST 120FPS">
+                        <i class="fa-solid fa-gauge"></i> BOOST 120FPS
+                    </div>
+                    <div class="live-tool-btn" data-action="auto_ram_clean" data-display="DỌN RAM">
+                        <i class="fa-solid fa-memory"></i> DỌN RAM
+                    </div>
+                    <div class="live-tool-btn" data-action="optimize_performance" data-display="DỌN CPU">
+                        <i class="fa-solid fa-microchip"></i> DỌN CPU
+                    </div>
+                    <div class="live-tool-btn" data-action="cache_clean" data-display="DỌN CACHE">
+                        <i class="fa-solid fa-trash-can"></i> DỌN CACHE
+                    </div>
+                    <div class="live-tool-btn" data-action="fan_speed" data-display="TĂNG QUẠT">
+                        <i class="fa-solid fa-fan"></i> TĂNG QUẠT
+                    </div>
+                    <div class="live-tool-btn" data-action="game_mode" data-display="TURBO MODE">
+                        <i class="fa-solid fa-bolt"></i> TURBO MODE
+                    </div>
+                    <div class="live-tool-btn" data-action="vip_full_optimize" data-display="VIP TỐI ƯU" style="border-color: #eab308;">
+                        <i class="fa-solid fa-star" style="color: #eab308;"></i> VIP TỐI ƯU
+                    </div>
+                    <div class="live-tool-btn" data-action="vip_ram_cleaner" data-display="VIP DỌN RAM" style="border-color: #eab308;">
+                        <i class="fa-solid fa-star" style="color: #eab308;"></i> VIP DỌN RAM
+                    </div>
+                    <div class="live-tool-btn" data-action="aimlock" data-display="AIMLOCK" style="border-color: #ff6b6b;">
+                        <i class="fa-solid fa-crosshairs" style="color: #ff6b6b;"></i> AIMLOCK
+                    </div>
+                    <div class="live-tool-btn" data-action="aimtriggerbot" data-display="TRIGGERBOT" style="border-color: #ff6b6b;">
+                        <i class="fa-solid fa-bolt" style="color: #ff6b6b;"></i> TRIGGERBOT
+                    </div>
+                    <div class="live-tool-btn" data-action="aimsmooth" data-display="AIM SMOOTH" style="border-color: #ff6b6b;">
+                        <i class="fa-solid fa-sliders-h" style="color: #ff6b6b;"></i> AIM SMOOTH
+                    </div>
+                    <div class="live-tool-btn" data-action="aimprediction" data-display="PREDICTION" style="border-color: #ff6b6b;">
+                        <i class="fa-solid fa-chart-line" style="color: #ff6b6b;"></i> PREDICTION
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB SETTINGS -->
+            <div id="tab-settings" class="tab-pane">
+                <div class="header-top">
+                    <div class="header-title" style="width: 100%; text-align: center;">
+                        <h1>CÀI ĐẶT VIP</h1>
+                        <p>Ultimate customization v5.0</p>
+                    </div>
+                </div>
+
+                <!-- GAME CONNECTION -->
+                <div class="setting-section-title">
+                    <i class="fa-solid fa-gamepad" style="color: #ff6b6b;"></i> KẾT NỐI GAME - DEEP INJECTION VIP
+                </div>
+                <div class="setting-card" style="border-color: #ff6b6b; background: rgba(255, 107, 107, 0.05);">
+                    <div class="game-connection-status" id="gameConnectionStatus">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 12px; height: 12px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 10px #ef4444;" id="gameStatusDot"></div>
+                            <div>
+                                <div style="font-weight: bold; font-size: 14px;" id="gameStatusText">🔴 Chưa kết nối</div>
+                                <div style="font-size: 11px; color: var(--text-muted);" id="gameStatusDetail">Nhấn "KẾT NỐI" để kết nối đến Free Fire</div>
+                            </div>
+                        </div>
+                        <button class="btn-connect-game" onclick="connectGame()" id="btnConnectGame">
+                            <i class="fa-solid fa-plug"></i> KẾT NỐI
+                        </button>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; font-size: 11px; color: var(--text-muted);">
+                        <div><span style="color: var(--text-main);">🆔 Game:</span> <span id="gameName">Free Fire</span></div>
+                        <div><span style="color: var(--text-main);">📦 Package:</span> <span id="gamePackage">com.dts.freefireth</span></div>
+                        <div><span style="color: var(--text-main);">🔄 PID:</span> <span id="gamePID">---</span></div>
+                        <div><span style="color: var(--text-main);">📌 Version:</span> <span id="gameVersion">---</span></div>
+                    </div>
+
+                    <div style="margin-top: 8px; padding: 8px; background: rgba(0,0,0,0.2); border-radius: 8px; font-size: 10px; color: var(--text-muted);">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px;">
+                            <span>🧠 Module Base: <span id="moduleBase" style="color: #10b981;">0x00000000</span></span>
+                            <span>📊 Offset Local: <span id="offsetLocal" style="color: #10b981;">0x00000000</span></span>
+                            <span>🎯 Offset View: <span id="offsetView" style="color: #10b981;">0x00000000</span></span>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button class="btn-game-action" onclick="scanGame()" style="flex: 1; padding: 8px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--panel-bg); color: var(--text-main); cursor: pointer; font-size: 11px; transition: all 0.3s;">
+                            <i class="fa-solid fa-search"></i> QUÉT GAME
+                        </button>
+                        <button class="btn-game-action" onclick="reconnectGame()" style="flex: 1; padding: 8px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--panel-bg); color: var(--text-main); cursor: pointer; font-size: 11px; transition: all 0.3s;">
+                            <i class="fa-solid fa-sync"></i> KẾT NỐI LẠI
+                        </button>
+                        <button class="btn-game-action" onclick="disconnectGame()" style="flex: 1; padding: 8px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--panel-bg); color: #ef4444; cursor: pointer; font-size: 11px; transition: all 0.3s;">
+                            <i class="fa-solid fa-power-off"></i> NGẮT KẾT NỐI
+                        </button>
+                        <button class="btn-game-action" onclick="injectMemory()" style="flex: 1; padding: 8px; border-radius: 10px; border: 1px solid #eab308; background: rgba(234,179,8,0.1); color: #eab308; cursor: pointer; font-size: 11px; transition: all 0.3s;">
+                            <i class="fa-solid fa-syringe"></i> INJECT MEMORY VIP
+                        </button>
+                    </div>
+                </div>
+
+                <div class="setting-section-title">GIAO DIỆN VIP</div>
+                <div class="setting-card">
+                    <div class="setting-row">
+                        <span>Màu chủ đề</span>
+                        <div class="color-palette">
+                            <div class="color-dot" style="background: #ef4444;" onclick="changeTheme('#ef4444'); playSound('click')"></div>
+                            <div class="color-dot" style="background: #f97316;" onclick="changeTheme('#f97316'); playSound('click')"></div>
+                            <div class="color-dot" style="background: #eab308;" onclick="changeTheme('#eab308'); playSound('click')"></div>
+                            <div class="color-dot" style="background: #10b981;" onclick="changeTheme('#10b981'); playSound('click')"></div>
+                            <div class="color-dot" style="background: #06b6d4;" onclick="changeTheme('#06b6d4'); playSound('click')"></div>
+                            <div class="color-dot" style="background: #3b82f6;" onclick="changeTheme('#3b82f6'); playSound('click')"></div>
+                            <div class="color-dot" style="background: #8b5cf6;" onclick="changeTheme('#8b5cf6'); playSound('click')"></div>
+                            <div class="color-dot" style="background: #ec4899;" onclick="changeTheme('#ec4899'); playSound('click')"></div>
+                        </div>
+                    </div>
+                    <div class="setting-row">
+                        <span>Chế độ tối</span>
+                        <label class="switch"><input type="checkbox" checked onchange="toggleDarkMode(); playSound('toggle')"><span class="slider-toggle"></span></label>
+                    </div>
+                    <div class="setting-row"><span>Hiệu ứng giao diện</span><span class="arrow-text">Neon Future VIP <i class="fa-solid fa-chevron-right"></i></span></div>
+                </div>
+
+                <div class="setting-section-title">HIỆU ỨNG & ÂM THANH VIP</div>
+                <div class="setting-card">
+                    <div class="setting-row"><span>Hiệu ứng chuyển động</span><label class="switch"><input type="checkbox" checked onchange="playSound('toggle')"><span class="slider-toggle"></span></label></div>
+                    <div class="setting-row"><span>Âm thanh hệ thống</span><label class="switch"><input type="checkbox" checked onchange="toggleSound(); playSound('toggle')"><span class="slider-toggle"></span></label></div>
+                    <div class="setting-row" style="flex-direction: column; align-items: flex-start; gap: 6px;">
+                        <span>Âm lượng hiệu ứng</span>
+                        <input type="range" class="range-slider" id="volumeSlider" value="80" oninput="updateVolume(this.value); playSound('slider')">
+                    </div>
+                </div>
+
+                <div class="setting-section-title">GAME ASSIST VIP</div>
+                <div class="setting-card">
+                    <div class="setting-row"><span>Aimbot Assist Pro</span><label class="switch"><input type="checkbox" onchange="playSound('toggle')"><span class="slider-toggle"></span></label></div>
+                    <div class="setting-row"><span>Hiển thị FPS</span><label class="switch"><input type="checkbox" checked onchange="playSound('toggle')"><span class="slider-toggle"></span></label></div>
+                    <div class="setting-row"><span>Chống giật khi ngắm</span><label class="switch"><input type="checkbox" onchange="playSound('toggle')"><span class="slider-toggle"></span></label></div>
+                    <div class="setting-row"><span>Auto headshot</span><label class="switch"><input type="checkbox" onchange="playSound('toggle')"><span class="slider-toggle"></span></label></div>
+                </div>
+
+                <div class="setting-section-title">KHÁC</div>
+                <div class="setting-card">
+                    <div class="setting-row"><span>Ngôn ngữ</span><span class="arrow-text">Tiếng Việt <i class="fa-solid fa-chevron-right"></i></span></div>
+                    <div class="setting-row"><span>Thông tin ứng dụng</span><span class="arrow-text">Phiên bản 5.0.0 VIP <i class="fa-solid fa-chevron-right"></i></span></div>
+                    <div class="setting-row"><span>Đánh giá ứng dụng</span><span class="arrow-text"><i class="fa-solid fa-star" style="color: #eab308;"></i> 4.9 <i class="fa-solid fa-chevron-right"></i></span></div>
+                </div>
+
+                <!-- Nút Đăng Xuất Key trong Settings -->
+                <button class="btn-logout" onclick="logoutKey()" style="width: 100%; padding: 14px; background: rgba(239,68,68,0.15); border: 1px solid #ef4444; border-radius: var(--radius-md); color: #ef4444; font-weight: 700; font-size: 14px; cursor: pointer; transition: all 0.3s; margin-top: 8px;">
+                    <i class="fa-solid fa-sign-out-alt"></i> ĐĂNG XUẤT KEY - RESET TOÀN BỘ
+                </button>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <button class="nav-item active" onclick="switchTab('home'); playSound('click')">
+                <i class="fa-solid fa-house"></i><span>HOME</span>
+            </button>
+            <button class="nav-item" onclick="switchTab('func'); playSound('click')">
+                <i class="fa-solid fa-cube"></i><span>FUNC</span>
+            </button>
+            <button class="nav-item" onclick="switchTab('live'); playSound('click')">
+                <i class="fa-solid fa-wave-square"></i><span>LIVE</span>
+            </button>
+            <button class="nav-item" onclick="switchTab('boost'); playSound('click')">
+                <i class="fa-solid fa-gauge-high"></i><span>BOOST</span>
+            </button>
+            <button class="nav-item" onclick="switchTab('settings'); playSound('click')">
+                <i class="fa-solid fa-gear"></i><span>SET</span>
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
