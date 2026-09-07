@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FF Key Generator Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Poppins', Tahoma, sans-serif;
+        }
+        body {
+            background: #05080f;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 12px;
+            background: radial-gradient(ellipse at 50% 0%, #0a0e1a 0%, #05080f 100%);
+        }
+        .app {
+            max-width: 520px;
+            width: 100%;
+            background: linear-gradient(145deg, #0b0f1e 0%, #070b16 100%);
+            border-radius: 28px;
+            padding: 20px 16px;
+            border: 1px solid rgba(0, 243, 255, 0.15);
+            box-shadow: 0 0 60px rgba(138, 43, 226, 0.15), inset 0 0 30px rgba(0, 243, 255, 0.02);
+            position: relative;
+            overflow: hidden;
+        }
+        .app::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 40%, rgba(0, 243, 255, 0.02) 0%, transparent 60%);
+            animation: spin 30s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+        }
+        .header .icon {
+            font-size: 40px;
+            color: #00f3ff;
+            text-shadow: 0 0 30px rgba(0, 243, 255, 0.3);
+            margin-bottom: 4px;
+        }
+        .header h1 {
+            font-size: 22px;
+            font-weight: 800;
+            background: linear-gradient(90deg, #fff, #00f3ff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header p {
+            font-size: 10px;
+            color: #7a8aa3;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .sync-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 9px;
+            color: #7a8aa3;
+            margin-top: 4px;
+        }
+        .sync-status .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse 1.5s infinite;
+        }
+        .sync-status .dot.online {
+            background: #10b981;
+            box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            margin-bottom: 14px;
+            position: relative;
+            z-index: 1;
+        }
+        .stat-box {
+            background: rgba(10, 14, 26, 0.7);
+            border: 1px solid rgba(255,255,255,0.04);
+            border-radius: 10px;
+            padding: 8px 4px;
+            text-align: center;
+        }
+        .stat-box .num {
+            font-size: 16px;
+            font-weight: 700;
+            color: #00f3ff;
+            text-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
+        }
+        .stat-box .label {
+            font-size: 7px;
+            color: #7a8aa3;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .card {
+            background: rgba(10, 14, 26, 0.7);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+        }
+        .card-title {
+            font-size: 10px;
+            font-weight: 600;
+            color: #7a8aa3;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .card-title i {
+            color: #00f3ff;
+        }
+        .row {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .row input, .row select {
+            flex: 1;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(0,0,0,0.4);
+            color: #fff;
+            font-size: 12px;
+            outline: none;
+            min-width: 60px;
+        }
+        .row input:focus, .row select:focus {
+            border-color: #00f3ff;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.08);
+        }
+        .row input::placeholder {
+            color: #4a5a73;
+        }
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+        }
+        .btn:active { transform: scale(0.95); }
+        .btn-primary {
+            background: linear-gradient(90deg, #8a2be2, #00f3ff);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.15);
+        }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 0 35px rgba(0, 243, 255, 0.25); }
+        .btn-success {
+            background: linear-gradient(90deg, #10b981, #059669);
+            color: #fff;
+        }
+        .btn-success:hover { transform: translateY(-1px); box-shadow: 0 0 25px rgba(16, 185, 129, 0.25); }
+        .btn-danger {
+            background: linear-gradient(90deg, #ef4444, #dc2626);
+            color: #fff;
+        }
+        .btn-danger:hover { transform: translateY(-1px); box-shadow: 0 0 25px rgba(239, 68, 68, 0.25); }
+        .btn-warning {
+            background: linear-gradient(90deg, #f59e0b, #d97706);
+            color: #fff;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+        }
+        .btn-outline:hover { border-color: #00f3ff; background: rgba(0,243,255,0.05); }
+        .btn-sm { padding: 4px 10px; font-size: 9px; border-radius: 6px; }
+        .btn-block { width: 100%; justify-content: center; }
+        .key-list {
+            max-height: 260px;
+            overflow-y: auto;
+            margin-top: 6px;
+        }
+        .key-list::-webkit-scrollbar { width: 3px; }
+        .key-list::-webkit-scrollbar-thumb { background: #00f3ff; border-radius: 3px; }
+        .key-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 10px;
+            background: rgba(0,0,0,0.25);
+            border-radius: 6px;
+            margin-bottom: 4px;
+            border-left: 3px solid #00f3ff;
+            transition: all 0.2s;
+        }
+        .key-item:hover { background: rgba(0,0,0,0.4); transform: translateX(3px); }
+        .key-item .key-text {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: #00f3ff;
+            text-shadow: 0 0 12px rgba(0, 243, 255, 0.08);
+        }
+        .key-item .key-meta {
+            font-size: 7px;
+            color: #7a8aa3;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .key-item .status {
+            padding: 1px 6px;
+            border-radius: 6px;
+            font-size: 7px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .key-item .status.active {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        .key-item .status.expired {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+        .key-item .status.used {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+        .key-actions {
+            display: flex;
+            gap: 3px;
+        }
+        .key-actions button {
+            background: none;
+            border: none;
+            color: #7a8aa3;
+            cursor: pointer;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-size: 11px;
+            transition: all 0.2s;
+        }
+        .key-actions button:hover { color: #00f3ff; background: rgba(0,243,255,0.08); }
+        .key-actions button.danger:hover { color: #ef4444; background: rgba(239,68,68,0.08); }
+        .empty-state {
+            text-align: center;
+            padding: 20px 10px;
+            color: #4a5a73;
+        }
+        .empty-state i { font-size: 28px; margin-bottom: 6px; opacity: 0.3; }
+        .empty-state p { font-size: 11px; }
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10,14,26,0.95);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(0,243,255,0.15);
+            border-radius: 10px;
+            padding: 10px 20px;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 600;
+            box-shadow: 0 0 40px rgba(0,0,0,0.6);
+            z-index: 9999;
+            animation: fadeInUp 0.3s ease;
+            max-width: 90%;
+            text-align: center;
+        }
+        .toast.success { border-color: #10b981; box-shadow: 0 0 30px rgba(16,185,129,0.15); }
+        .toast.error { border-color: #ef4444; box-shadow: 0 0 30px rgba(239,68,68,0.15); }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateX(-50%) translateY(15px) scale(0.95); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+        }
+        .toast.out { opacity: 0; transform: translateX(-50%) translateY(15px) scale(0.95); transition: all 0.3s; }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; }
+        .flex-center { display: flex; align-items: center; gap: 4px; }
+        .mt-6 { margin-top: 6px; }
+        .mb-6 { margin-bottom: 6px; }
+        .gap-4 { gap: 4px; }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 7px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .badge-cyan { background: rgba(0,243,255,0.12); color: #00f3ff; border: 1px solid rgba(0,243,255,0.15); }
+        .badge-gold { background: rgba(234,179,8,0.12); color: #eab308; border: 1px solid rgba(234,179,8,0.15); }
+        .badge-purple { background: rgba(138,43,226,0.12); color: #a855f7; border: 1px solid rgba(138,43,226,0.15); }
+        .import-area { display: none; margin-top: 6px; }
+        .import-area textarea {
+            width: 100%;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(0,0,0,0.4);
+            color: #fff;
+            font-size: 10px;
+            font-family: 'Courier New', monospace;
+            outline: none;
+            resize: vertical;
+            min-height: 60px;
+        }
+        .import-area textarea:focus { border-color: #00f3ff; }
+        .footer {
+            text-align: center;
+            font-size: 8px;
+            color: #4a5a73;
+            margin-top: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        @media (max-width: 420px) {
+            .app { padding: 12px 10px; }
+            .stats { grid-template-columns: repeat(4, 1fr); gap: 4px; }
+            .stat-box .num { font-size: 13px; }
+            .stat-box .label { font-size: 6px; }
+            .row input { font-size: 10px; padding: 6px 8px; }
+            .btn { font-size: 9px; padding: 6px 10px; }
+            .key-item .key-text { font-size: 9px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app">
+    <!-- Header -->
+    <div class="header">
+        <div class="icon"><i class="fa-solid fa-key"></i></div>
+        <h1>KEY GENERATOR PRO</h1>
+        <p>FF Optimizer VIP • Đồng bộ real-time</p>
+        <div class="sync-status">
+            <span class="dot online" id="syncDot"></span>
+            <span id="syncStatus">Đồng bộ đang hoạt động</span>
+            <span style="color:#4a5a73;">|</span>
+            <span id="tabCount" style="font-size:8px;color:#4a5a73;">1 tab</span>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats">
+        <div class="stat-box"><div class="num" id="totalKeys">0</div><div class="label">Tổng</div></div>
+        <div class="stat-box"><div class="num" id="activeKeys">0</div><div class="label">Hoạt động</div></div>
+        <div class="stat-box"><div class="num" id="expiredKeys">0</div><div class="label">Hết hạn</div></div>
+        <div class="stat-box"><div class="num" id="usedKeys">0</div><div class="label">Đã dùng</div></div>
+    </div>
+
+    <!-- Generate -->
+    <div class="card">
+        <div class="card-title"><i class="fa-solid fa-plus-circle"></i> Tạo key mới</div>
+        <div class="row">
+            <input type="number" id="daysInput" value="7" min="1" max="365" placeholder="Ngày" style="max-width:80px;">
+            <input type="number" id="countInput" value="3" min="1" max="50" placeholder="SL" style="max-width:70px;">
+            <button class="btn btn-primary" onclick="generateKeys()"><i class="fa-solid fa-wand-magic-sparkles"></i> Tạo</button>
+        </div>
+        <div style="margin-top:6px;display:flex;gap:4px;flex-wrap:wrap;">
+            <button class="btn btn-sm btn-success" onclick="quickGen(1)">1 ngày</button>
+            <button class="btn btn-sm btn-success" onclick="quickGen(7)">7 ngày</button>
+            <button class="btn btn-sm btn-success" onclick="quickGen(30)">30 ngày</button>
+            <button class="btn btn-sm btn-warning" onclick="quickGen(90)">90 ngày</button>
+            <button class="btn btn-sm btn-danger" onclick="quickGen(365)">365 ngày</button>
+        </div>
+    </div>
+
+    <!-- Key List -->
+    <div class="card">
+        <div class="flex-between">
+            <div class="card-title" style="margin-bottom:0;"><i class="fa-solid fa-list"></i> Danh sách key</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;">
+                <button class="btn btn-sm btn-outline" onclick="toggleImport()"><i class="fa-solid fa-upload"></i> Nhập</button>
+                <button class="btn btn-sm btn-outline" onclick="exportKeys()"><i class="fa-solid fa-download"></i> Xuất</button>
+                <button class="btn btn-sm btn-danger" onclick="clearAll()"><i class="fa-solid fa-trash"></i> Xóa</button>
+            </div>
+        </div>
+        <div class="import-area" id="importArea">
+            <textarea id="importText" placeholder="Paste key, mỗi key 1 dòng&#10;VD: FF-ABCD-1234-EFGH"></textarea>
+            <div style="display:flex;gap:6px;margin-top:6px;">
+                <button class="btn btn-sm btn-success" onclick="importKeys()"><i class="fa-solid fa-file-import"></i> Nhập</button>
+                <button class="btn btn-sm btn-outline" onclick="toggleImport()">Đóng</button>
+            </div>
+        </div>
+        <div class="key-list" id="keyList">
+            <div class="empty-state">
+                <i class="fa-solid fa-key"></i>
+                <p>Chưa có key nào. Hãy tạo key mới!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Validate -->
+    <div class="card">
+        <div class="card-title"><i class="fa-solid fa-check-circle"></i> Kiểm tra key</div>
+        <div class="row">
+            <input type="text" id="validateInput" placeholder="Nhập key cần kiểm tra">
+            <button class="btn btn-primary" onclick="validateKey()"><i class="fa-solid fa-magnifying-glass"></i> KT</button>
+        </div>
+        <div id="validateResult" style="margin-top:6px;font-size:11px;min-height:18px;"></div>
+    </div>
+
+    <!-- Master Key -->
+    <div class="card" style="border-color:rgba(234,179,8,0.15);">
+        <div class="flex-between">
+            <div>
+                <span class="badge badge-gold"><i class="fa-solid fa-crown"></i> MASTER</span>
+                <span style="font-family:'Courier New',monospace;font-size:14px;font-weight:700;color:#eab308;margin-left:6px;">VIP2026</span>
+            </div>
+            <div>
+                <span class="badge badge-cyan"><i class="fa-regular fa-clock"></i> 7 ngày</span>
+                <span class="badge badge-purple"><i class="fa-solid fa-shield"></i> 1 thiết bị</span>
+            </div>
+        </div>
+        <div style="font-size:9px;color:#7a8aa3;margin-top:4px;">
+            <i class="fa-solid fa-info-circle"></i> Key format: <strong>FF-XXXX-XXXX-XXXX</strong>
+        </div>
+    </div>
+
+    <div class="footer">
+        FF Key Generator Pro v2.0 • <span id="currentTime"></span>
+    </div>
+</div>
+
+<!-- Font Awesome -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="firebase-sync.js"></script>
+
+<script>
+// ============================================================
+// KEY ENGINE - HOÀN CHỈNH, FIX LỖI
+// ============================================================
+
+const KEY_STORAGE = 'ff_keygen_data_v2';
+const SYNC_CHANNEL = 'ff_key_sync';
+
+const KeyEngine = {
+    // Tạo 1 key ngẫu nhiên
+    generateSingleKey() {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let key = 'FF-';
+        for (let i = 0; i < 4; i++) {
+            let seg = '';
+            for (let j = 0; j < 4; j++) {
+                seg += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            key += seg;
+            if (i < 3) key += '-';
+        }
+        return key;
+    },
+
+    // Tạo nhiều key
+    generateKeys(count, days) {
+        const keys = [];
+        const now = Date.now();
+        const expire = now + (days * 24 * 60 * 60 * 1000);
+        for (let i = 0; i < count; i++) {
+            keys.push({
+                key: this.generateSingleKey(),
+                createdAt: now,
+                expiresAt: expire,
+                days: days,
+                isActive: true,
+                deviceId: null,
+                usedAt: null,
+                syncId: 'gen_' + Date.now() + '_' + i
+            });
+        }
+        return keys;
+    },
+
+    // Lưu dữ liệu
+    save(data) {
+        try {
+            localStorage.setItem(KEY_STORAGE, JSON.stringify(data));
+            this.broadcast(data);
+            if (window.FirebaseKeySync) window.FirebaseKeySync.save(data);
+            return true;
+        } catch(e) {
+            console.error('Save error:', e);
+            return false;
+        }
+    },
+
+    // Đọc dữ liệu
+    load() {
+        try {
+            const raw = localStorage.getItem(KEY_STORAGE);
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed)) return parsed;
+            }
+            return [];
+        } catch(e) {
+            return [];
+        }
+    },
+
+    // Broadcast đồng bộ
+    broadcast(data) {
+        if (window.parent !== window) {
+            window.parent.postMessage({ type: 'ff-keygen-sync', data: data }, '*');
+        }
+        try {
+            const ch = new BroadcastChannel(SYNC_CHANNEL);
+            ch.postMessage({ type: 'sync', data: data, ts: Date.now() });
+            ch.close();
+        } catch(e) {
+            // Fallback: trigger storage event
+            try {
+                localStorage.setItem('__ff_sync_trigger', Date.now().toString());
+            } catch(e2) {}
+        }
+    },
+
+    // Lắng nghe đồng bộ
+    listen(callback) {
+        try {
+            const ch = new BroadcastChannel(SYNC_CHANNEL);
+            ch.onmessage = (e) => {
+                if (e.data && e.data.type === 'sync' && e.data.data) {
+                    callback(e.data.data);
+                }
+            };
+            this._channel = ch;
+        } catch(e) {}
+
+        window.addEventListener('storage', (e) => {
+            if (e.key === KEY_STORAGE && e.newValue) {
+                try {
+                    const data = JSON.parse(e.newValue);
+                    if (Array.isArray(data)) callback(data);
+                } catch(e2) {}
+            }
+            if (e.key === '__ff_sync_trigger') callback(this.load());
+        });
+    },
+
+    // Thêm key
+    addKeys(newKeys) {
+        const existing = this.load();
+        const merged = [...newKeys, ...existing];
+        this.save(merged);
+        return merged;
+    },
+
+    // Xóa 1 key
+    deleteKey(keyText) {
+        let data = this.load();
+        data = data.filter(item => item.key !== keyText);
+        this.save(data);
+        return data;
+    },
+
+    // Xóa tất cả
+    clearAll() {
+        this.save([]);
+        return [];
+    },
+
+    // Kiểm tra key
+    validate(keyText) {
+        const data = this.load();
+        const item = data.find(k => k.key === keyText);
+        if (!item) {
+            return { valid: false, message: '❌ Key không tồn tại' };
+        }
+        const now = Date.now();
+        if (now > item.expiresAt) {
+            return { valid: false, message: '❌ Key đã hết hạn', data: item };
+        }
+        if (!item.isActive) {
+            return { valid: false, message: '❌ Key đã được sử dụng', data: item };
+        }
+        const daysLeft = Math.ceil((item.expiresAt - now) / (24 * 60 * 60 * 1000));
+        return {
+            valid: true,
+            message: `✅ Key hợp lệ. Còn ${daysLeft} ngày`,
+            data: item,
+            daysLeft: daysLeft
+        };
+    },
+
+    // Đánh dấu key đã dùng (đồng bộ với app chính)
+    markUsed(keyText, deviceId) {
+        let data = this.load();
+        const item = data.find(k => k.key === keyText);
+        if (item && item.isActive) {
+            const now = Date.now();
+            if (now < item.expiresAt) {
+                item.isActive = false;
+                item.deviceId = deviceId || 'DEV_' + Math.random().toString(36).substring(2, 10).toUpperCase();
+                item.usedAt = now;
+                this.save(data);
+                return { success: true };
+            }
+        }
+        return { success: false };
+    },
+
+    // Thống kê
+    getStats() {
+        const data = this.load();
+        const total = data.length;
+        const now = Date.now();
+        let active = 0, expired = 0, used = 0;
+        data.forEach(item => {
+            if (!item.isActive) {
+                used++;
+            } else if (now >= item.expiresAt) {
+                expired++;
+            } else {
+                active++;
+            }
+        });
+        return { total, active, expired, used };
+    },
+
+    // Import từ text
+    importFromText(text) {
+        const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+        const keys = [];
+        const now = Date.now();
+        const defaultDays = 7;
+        const expire = now + (defaultDays * 24 * 60 * 60 * 1000);
+        lines.forEach(line => {
+            // Chỉ lấy key đúng format FF-XXXX-XXXX-XXXX
+            if (line.match(/^FF-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/)) {
+                // Kiểm tra trùng
+                const existing = this.load();
+                const dup = existing.find(k => k.key === line);
+                if (!dup) {
+                    keys.push({
+                        key: line,
+                        createdAt: now,
+                        expiresAt: expire,
+                        days: defaultDays,
+                        isActive: true,
+                        deviceId: null,
+                        usedAt: null,
+                        syncId: 'import_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6)
+                    });
+                }
+            }
+        });
+        return keys;
+    }
+};
+
+// ============================================================
+// UI CONTROLLER
+// ============================================================
+
+function renderKeys() {
+    const data = KeyEngine.load();
+    const container = document.getElementById('keyList');
+    
+    if (!data || data.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <i class="fa-solid fa-key"></i>
+                <p>Chưa có key nào. Hãy tạo key mới!</p>
+            </div>
+        `;
+        updateStats();
+        return;
+    }
+
+    const now = Date.now();
+    // Sắp xếp: key còn hiệu lực lên đầu
+    const sorted = [...data].sort((a, b) => {
+        const aValid = a.isActive && now < a.expiresAt;
+        const bValid = b.isActive && now < b.expiresAt;
+        if (aValid && !bValid) return -1;
+        if (!aValid && bValid) return 1;
+        return b.createdAt - a.createdAt;
+    });
+
+    let html = '';
+    sorted.forEach(item => {
+        const isValid = item.isActive && now < item.expiresAt;
+        let statusClass = 'active';
+        let statusText = '✅ Active';
+        if (!item.isActive) {
+            statusClass = 'used';
+            statusText = '🔴 Đã dùng';
+        } else if (!isValid) {
+            statusClass = 'expired';
+            statusText = '⛔ Hết hạn';
+        }
+        const daysLeft = isValid ? Math.ceil((item.expiresAt - now) / (24 * 60 * 60 * 1000)) : 0;
+        
+        html += `
+            <div class="key-item">
+                <div>
+                    <div class="key-text">${item.key}</div>
+                    <div style="font-size:7px;color:#4a5a73;margin-top:1px;">
+                        ${isValid ? `⏳ ${daysLeft} ngày` : (item.deviceId ? `📱 ${item.deviceId.substring(0,10)}...` : '⛔ Không còn hiệu lực')}
+                    </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:4px;">
+                    <span class="status ${statusClass}">${statusText}</span>
+                    <div class="key-actions">
+                        <button onclick="copyKey('${item.key}')" title="Sao chép"><i class="fa-regular fa-copy"></i></button>
+                        <button class="danger" onclick="deleteKey('${item.key}')" title="Xóa"><i class="fa-regular fa-trash-can"></i></button>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    container.innerHTML = html;
+    updateStats();
+}
+
+function updateStats() {
+    const stats = KeyEngine.getStats();
+    document.getElementById('totalKeys').textContent = stats.total;
+    document.getElementById('activeKeys').textContent = stats.active;
+    document.getElementById('expiredKeys').textContent = stats.expired;
+    document.getElementById('usedKeys').textContent = stats.used;
+}
+
+function generateKeys() {
+    const days = parseInt(document.getElementById('daysInput').value) || 7;
+    const count = parseInt(document.getElementById('countInput').value) || 1;
+    
+    if (count < 1 || count > 50) {
+        showToast('⚠️ Số lượng key phải từ 1 đến 50', 'error');
+        return;
+    }
+    if (days < 1 || days > 365) {
+        showToast('⚠️ Số ngày phải từ 1 đến 365', 'error');
+        return;
+    }
+
+    const newKeys = KeyEngine.generateKeys(count, days);
+    KeyEngine.addKeys(newKeys);
+    renderKeys();
+    showToast(`✅ Đã tạo ${count} key, hạn ${days} ngày`, 'success');
+    playSound('success');
+}
+
+function quickGen(days) {
+    document.getElementById('daysInput').value = days;
+    document.getElementById('countInput').value = 3;
+    generateKeys();
+}
+
+function deleteKey(keyText) {
+    if (confirm(`Xóa key "${keyText}"?`)) {
+        KeyEngine.deleteKey(keyText);
+        renderKeys();
+        showToast(`🗑️ Đã xóa key: ${keyText}`, 'error');
+        playSound('error');
+    }
+}
+
+function clearAll() {
+    if (confirm('Xóa TẤT CẢ key? Không thể phục hồi!')) {
+        KeyEngine.clearAll();
+        renderKeys();
+        showToast('🗑️ Đã xóa tất cả key', 'error');
+        playSound('error');
+    }
+}
+
+function copyKey(keyText) {
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(keyText).then(() => {
+            showToast(`📋 Đã sao chép: ${keyText}`, 'success');
+        }).catch(() => fallbackCopy(keyText));
+    } else {
+        fallbackCopy(keyText);
+    }
+}
+
+function fallbackCopy(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast(`📋 Đã sao chép: ${text}`, 'success');
+}
+
+function validateKey() {
+    const input = document.getElementById('validateInput');
+    const result = document.getElementById('validateResult');
+    const key = input.value.trim().toUpperCase();
+
+    if (!key) {
+        result.innerHTML = '⚠️ Vui lòng nhập key';
+        result.style.color = '#f59e0b';
+        return;
+    }
+
+    const validation = KeyEngine.validate(key);
+    if (validation.valid) {
+        result.innerHTML = `
+            <div style="display:flex;align-items:center;gap:6px;color:#10b981;">
+                <i class="fa-solid fa-check-circle"></i>
+                <span>${validation.message}</span>
+                <span class="badge badge-cyan">${validation.daysLeft} ngày</span>
+            </div>
+        `;
+        showToast('✅ Key hợp lệ!', 'success');
+        playSound('success');
+    } else {
+        result.innerHTML = `
+            <div style="display:flex;align-items:center;gap:6px;color:#ef4444;">
+                <i class="fa-solid fa-times-circle"></i>
+                <span>${validation.message}</span>
+            </div>
+        `;
+        showToast('❌ Key không hợp lệ', 'error');
+        playSound('error');
+    }
+}
+
+function toggleImport() {
+    const area = document.getElementById('importArea');
+    area.style.display = area.style.display === 'block' ? 'none' : 'block';
+}
+
+function importKeys() {
+    const text = document.getElementById('importText').value;
+    if (!text.trim()) {
+        showToast('⚠️ Vui lòng nhập danh sách key', 'error');
+        return;
+    }
+    const keys = KeyEngine.importFromText(text);
+    if (keys.length === 0) {
+        showToast('⚠️ Không tìm thấy key hợp lệ (format FF-XXXX-XXXX-XXXX)', 'error');
+        return;
+    }
+    KeyEngine.addKeys(keys);
+    renderKeys();
+    document.getElementById('importText').value = '';
+    toggleImport();
+    showToast(`✅ Đã nhập ${keys.length} key`, 'success');
+    playSound('success');
+}
+
+function exportKeys() {
+    const data = KeyEngine.load();
+    if (data.length === 0) {
+        showToast('⚠️ Không có key nào để xuất', 'error');
+        return;
+    }
+
+    let text = '=== FF OPTIMIZER VIP KEYS ===\n';
+    text += `Tổng: ${data.length}\n`;
+    text += `Ngày: ${new Date().toLocaleString('vi-VN')}\n\n`;
+
+    const now = Date.now();
+    data.forEach((item, i) => {
+        const isValid = item.isActive && now < item.expiresAt;
+        const daysLeft = isValid ? Math.ceil((item.expiresAt - now) / (24 * 60 * 60 * 1000)) : 0;
+        text += `${i+1}. ${item.key}`;
+        text += isValid ? ` (✅ ${daysLeft} ngày)` : (item.isActive ? ' (⛔ Hết hạn)' : ' (🔴 Đã dùng)');
+        if (item.deviceId) text += ` - ${item.deviceId}`;
+        text += '\n';
+    });
+
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `FF_Keys_${new Date().toISOString().slice(0,10)}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast(`📥 Đã xuất ${data.length} key`, 'success');
+}
+
+// ============================================================
+// SYNC MANAGER
+// ============================================================
+
+const SyncManager = {
+    tabCount: 1,
+
+    init() {
+        // Lắng nghe đồng bộ
+        KeyEngine.listen((data) => {
+            if (data && Array.isArray(data)) {
+                renderKeys();
+                showToast('🔄 Đồng bộ key từ tab khác', 'success');
+            }
+        });
+
+        if (window.FirebaseKeySync) {
+            window.FirebaseKeySync.init((data) => {
+                localStorage.setItem(KEY_STORAGE, JSON.stringify(data));
+                renderKeys();
+                showToast('☁️ Đã đồng bộ key từ Firebase', 'success');
+            });
+        }
+
+        // Đếm tab
+        try {
+            const ch = new BroadcastChannel('__ff_tab_count');
+            ch.postMessage({ type: 'ping', id: this.getTabId() });
+            ch.onmessage = (e) => {
+                if (e.data && e.data.type === 'pong') {
+                    this.tabCount = e.data.count || 1;
+                    document.getElementById('tabCount').textContent = this.tabCount + ' tab';
+                }
+            };
+            setInterval(() => {
+                try {
+                    const ch2 = new BroadcastChannel('__ff_tab_count');
+                    ch2.postMessage({ type: 'ping', id: this.getTabId() });
+                    ch2.close();
+                } catch(e) {}
+            }, 5000);
+        } catch(e) {}
+
+        window.addEventListener('beforeunload', () => {
+            try {
+                const ch = new BroadcastChannel('__ff_tab_count');
+                ch.postMessage({ type: 'unload', id: this.getTabId() });
+                ch.close();
+            } catch(e) {}
+        });
+    },
+
+    getTabId() {
+        if (!window._tabId) {
+            window._tabId = 'tab_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6);
+        }
+        return window._tabId;
+    }
+};
+
+// ============================================================
+// SOUND SYSTEM
+// ============================================================
+
+let audioCtx = null;
+
+function playSound(type) {
+    try {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        gain.gain.value = 0.08;
+        if (type === 'success') {
+            osc.frequency.setValueAtTime(523, audioCtx.currentTime);
+            osc.frequency.setValueAtTime(659, audioCtx.currentTime + 0.08);
+            osc.frequency.setValueAtTime(784, audioCtx.currentTime + 0.16);
+            osc.type = 'sine';
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.25);
+        } else if (type === 'error') {
+            osc.frequency.value = 200;
+            osc.type = 'sawtooth';
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.25);
+        } else {
+            osc.frequency.value = 800;
+            osc.type = 'sine';
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.05);
+        }
+    } catch(e) {}
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+
+function showToast(message, type = 'info') {
+    const existing = document.querySelector('.toast');
+    if (existing) existing.remove();
+
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.classList.add('out');
+        setTimeout(() => toast.remove(), 400);
+    }, 2800);
+}
+
+// ============================================================
+// CLOCK
+// ============================================================
+
+function updateClock() {
+    const now = new Date();
+    document.getElementById('currentTime').textContent = 
+        String(now.getHours()).padStart(2,'0') + ':' +
+        String(now.getMinutes()).padStart(2,'0') + ':' +
+        String(now.getSeconds()).padStart(2,'0');
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ============================================================
+// KEYBOARD SHORTCUTS
+// ============================================================
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        if (document.activeElement && document.activeElement.id === 'validateInput') {
+            validateKey();
+        }
+    }
+    if (e.ctrlKey && e.key === 'g') {
+        e.preventDefault();
+        generateKeys();
+    }
+    if (e.ctrlKey && e.key === 'e') {
+        e.preventDefault();
+        exportKeys();
+    }
+});
+
+// ============================================================
+// INIT
+// ============================================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Khởi tạo sync
+    SyncManager.init();
+    
+    // Render keys
+    renderKeys();
+    
+    // Tạo key mẫu nếu chưa có
+    const existing = KeyEngine.load();
+    if (existing.length === 0) {
+        const sample = KeyEngine.generateKeys(3, 7);
+        KeyEngine.addKeys(sample);
+        renderKeys();
+        showToast('🔑 Đã tạo sẵn 3 key mẫu!', 'success');
+    }
+    
+    // Auto validate input focus
+    setTimeout(() => {
+        document.getElementById('validateInput')?.focus();
+    }, 500);
+});
+
+// ============================================================
+// EXPOSE GLOBALS
+// ============================================================
+
+window.generateKeys = generateKeys;
+window.quickGen = quickGen;
+window.deleteKey = deleteKey;
+window.clearAll = clearAll;
+window.copyKey = copyKey;
+window.validateKey = validateKey;
+window.exportKeys = exportKeys;
+window.importKeys = importKeys;
+window.toggleImport = toggleImport;
+window.showToast = showToast;
+window.playSound = playSound;
+window.KeyEngine = KeyEngine;
+
+console.log('[KeyGen Pro] Đã sẵn sàng!');
+console.log('[KeyGen Pro] Master Key: VIP2026');
+console.log('[KeyGen Pro] Shortcuts: Ctrl+G tạo key, Ctrl+E xuất key');
+console.log('[KeyGen Pro] Đồng bộ real-time giữa các tab!');
+</script>
+
+</body>
+</html>
