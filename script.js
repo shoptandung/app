@@ -72,6 +72,14 @@ const LockSystem = {
         try { localStorage.setItem(this.DEVICE_KEY, id); } catch(e) {}
     },
 
+    getDeviceLabel() {
+        const ua = navigator.userAgent || '';
+        const platform = ua.includes('Android') ? 'Android' :
+            ua.includes('iPhone') || ua.includes('iPad') ? 'iOS' :
+            ua.includes('Windows') ? 'Windows' : 'Thiết bị khác';
+        return `${platform} ${screen.width}x${screen.height}`;
+    },
+
     loadAllKeysFromKeygen() {
         try {
             const raw = localStorage.getItem(this.KEYGEN_STORAGE);
@@ -101,25 +109,12 @@ const LockSystem = {
         } catch(e) { return; }
 
         const currentLock = this.loadData();
-        if (currentLock && currentLock.expiresAt >= Date.now()) return;
+        if (!currentLock || currentLock.fromKeygen !== true) return;
 
-        const now = Date.now();
-        const validKey = keygenData.find(k => k && k.isActive && k.expiresAt > now);
-        if (!validKey) return;
-
-        const deviceId = this.getStoredDeviceId() || this.generateDeviceId();
-        this.saveDeviceId(deviceId);
-        this.saveData({
-            deviceId: deviceId,
-            activatedAt: now,
-            expiresAt: validKey.expiresAt,
-            key: validKey.key,
-            version: '5.0.0',
-            fromKeygen: true
-        });
-        this.markKeyUsed(validKey.key, deviceId);
-        showToast('🔄 Tự động kích hoạt key từ keygen!', 'success');
-        this.checkAndUnlock();
+        const currentKey = keygenData.find(k => k && k.key === currentLock.key);
+        if (!currentKey || currentKey.deviceId !== currentLock.deviceId || currentKey.expiresAt <= Date.now()) {
+            this.revokeLocalActivation('Key đã bị thu hồi khỏi thiết bị này.');
+        }
     },
 
     listenForKeys() {
@@ -146,13 +141,14 @@ const LockSystem = {
         });
     },
 
-    markKeyUsed(keyText, deviceId) {
+    markKeyUsed(keyText, deviceId, deviceName) {
         try {
             let data = this.loadAllKeysFromKeygen();
             const item = data.find(k => k.key === keyText);
             if (item && item.isActive) {
                 item.isActive = false;
                 item.deviceId = deviceId;
+                item.deviceName = deviceName || item.deviceName || 'Thiết bị không xác định';
                 item.usedAt = Date.now();
                 localStorage.setItem(this.KEYGEN_STORAGE, JSON.stringify(data));
                 try {
@@ -163,6 +159,21 @@ const LockSystem = {
                 if (window.FirebaseKeySync) window.FirebaseKeySync.save(data);
             }
         } catch(e) {}
+    },
+
+    revokeLocalActivation(reason) {
+        localStorage.removeItem(this.STORAGE_KEY);
+        this.isUnlocked = false;
+        this.activationData = null;
+        const overlay = document.getElementById('lockOverlay');
+        if (overlay) {
+            overlay.style.display = 'flex';
+            overlay.style.opacity = '1';
+            overlay.style.transform = 'scale(1)';
+        }
+        const status = this.checkStatus();
+        this.updateUI(status);
+        if (reason) showToast('⛔ ' + reason, 'error');
     },
 
     checkAndUnlock() {
@@ -216,7 +227,7 @@ const LockSystem = {
                     fromKeygen: true
                 };
                 this.saveData(activationData);
-                this.markKeyUsed(trimmedKey, deviceId);
+                this.markKeyUsed(trimmedKey, deviceId, this.getDeviceLabel());
                 this.isUnlocked = true;
                 return { success: true, deviceId: deviceId, expiry: new Date(found.expiresAt) };
             } else {
@@ -277,7 +288,7 @@ const LockSystem = {
             case 'not_activated':
                 subEl.textContent = '🔑 Nhập key kích hoạt để sử dụng VIP';
                 errorEl.textContent = '';
-                attemptsEl.textContent = 'Key mặc định: ' + this.MASTER_KEY + ' hoặc key từ keygen';
+                attemptsEl.textContent = 'Nhập key do quản trị viên cấp';
                 if (expiryEl) expiryEl.style.display = 'none';
                 if (input) { input.disabled = false; input.value = ''; input.focus(); }
                 if (btn) btn.disabled = false;
@@ -2235,7 +2246,7 @@ function logoutKey() {
             errorEl.style.color = '#ef4444';
         }
         if (attemptsEl) {
-            attemptsEl.textContent = 'Key mặc định: ' + LockSystem.MASTER_KEY;
+            attemptsEl.textContent = 'Nhập key do quản trị viên cấp';
             attemptsEl.style.color = 'var(--text-muted)';
         }
         if (expiryEl) {

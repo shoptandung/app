@@ -483,10 +483,13 @@ const KeyEngine = {
     generateSingleKey() {
         const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         let key = 'FF-';
+        const randomBytes = new Uint32Array(16);
+        crypto.getRandomValues(randomBytes);
+        let randomIndex = 0;
         for (let i = 0; i < 4; i++) {
             let seg = '';
             for (let j = 0; j < 4; j++) {
-                seg += chars.charAt(Math.floor(Math.random() * chars.length));
+                seg += chars.charAt(randomBytes[randomIndex++] % chars.length);
             }
             key += seg;
             if (i < 3) key += '-';
@@ -595,6 +598,17 @@ const KeyEngine = {
         data = data.filter(item => item.key !== keyText);
         this.save(data);
         return data;
+    },
+
+    releaseDevice(keyText) {
+        const data = this.load();
+        const item = data.find(entry => entry.key === keyText);
+        if (!item || item.isActive || !item.deviceId) return false;
+        item.isActive = true;
+        item.deviceId = null;
+        item.usedAt = null;
+        this.save(data);
+        return true;
     },
 
     // Xóa tất cả
@@ -740,13 +754,14 @@ function renderKeys() {
                 <div>
                     <div class="key-text">${item.key}</div>
                     <div style="font-size:7px;color:#4a5a73;margin-top:1px;">
-                        ${isValid ? `⏳ ${daysLeft} ngày` : (item.deviceId ? `📱 ${item.deviceId.substring(0,10)}...` : '⛔ Không còn hiệu lực')}
+                        ${isValid ? `⏳ ${daysLeft} ngày` : (item.deviceId ? `📱 ${item.deviceName || 'Thiết bị'} • ${item.deviceId} • ${item.usedAt ? new Date(item.usedAt).toLocaleString('vi-VN') : ''}` : '⛔ Không còn hiệu lực')}
                     </div>
                 </div>
                 <div style="display:flex;align-items:center;gap:4px;">
                     <span class="status ${statusClass}">${statusText}</span>
                     <div class="key-actions">
                         <button onclick="copyKey('${item.key}')" title="Sao chép"><i class="fa-regular fa-copy"></i></button>
+                        ${item.deviceId ? `<button onclick="releaseDevice('${item.key}')" title="Gỡ thiết bị, cho phép dùng lại"><i class="fa-solid fa-mobile-screen-button"></i></button>` : ''}
                         <button class="danger" onclick="deleteKey('${item.key}')" title="Xóa"><i class="fa-regular fa-trash-can"></i></button>
                     </div>
                 </div>
@@ -797,6 +812,17 @@ function deleteKey(keyText) {
         renderKeys();
         showToast(`🗑️ Đã xóa key: ${keyText}`, 'error');
         playSound('error');
+    }
+}
+
+function releaseDevice(keyText) {
+    if (!confirm(`Gỡ thiết bị đang dùng key "${keyText}"? Key sẽ được cấp lại cho thiết bị khác.`)) return;
+    if (KeyEngine.releaseDevice(keyText)) {
+        renderKeys();
+        showToast(`✅ Đã gỡ thiết bị khỏi key: ${keyText}`, 'success');
+        playSound('success');
+    } else {
+        showToast('⚠️ Key này chưa có thiết bị để gỡ', 'error');
     }
 }
 
@@ -1084,15 +1110,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Render keys
     renderKeys();
     
-    // Tạo key mẫu nếu chưa có
-    const existing = KeyEngine.load();
-    if (existing.length === 0) {
-        const sample = KeyEngine.generateKeys(3, 7);
-        KeyEngine.addKeys(sample);
-        renderKeys();
-        showToast('🔑 Đã tạo sẵn 3 key mẫu!', 'success');
-    }
-    
     // Auto validate input focus
     setTimeout(() => {
         document.getElementById('validateInput')?.focus();
@@ -1106,6 +1123,7 @@ document.addEventListener('DOMContentLoaded', function() {
 window.generateKeys = generateKeys;
 window.quickGen = quickGen;
 window.deleteKey = deleteKey;
+window.releaseDevice = releaseDevice;
 window.clearAll = clearAll;
 window.copyKey = copyKey;
 window.validateKey = validateKey;
